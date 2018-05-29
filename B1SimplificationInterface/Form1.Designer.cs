@@ -1021,7 +1021,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "B1 Simplification Interface V1.0.0.1";
+            this.Text = "B1 Simplification Interface V1.0.0.2";
             this.tabControl1.ResumeLayout(false);
             this.tab_main.ResumeLayout(false);
             this.tab_error_log.ResumeLayout(false);
