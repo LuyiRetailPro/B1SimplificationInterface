@@ -23,6 +23,7 @@ namespace B1SimplificationInterface
             loadGroupSettings(group_SLIP);
             loadGroupSettings(group_VOU_DISCREPANCY);
             loadGroupSettings(group_VOU_RETURN);
+            loadGroupSettings(group_SFS_VOU_RETURN);
             loadGroupSettings(group_STORE_SYNC);
             loadEmailSettings();
             String[] features = Enum.GetNames(typeof(MainController.Features));
@@ -64,7 +65,7 @@ namespace B1SimplificationInterface
         {
             Settings settings = controller.settings;
             TextBox tb = sender as TextBox;
-            settings.setEmailSetting(tb.Tag, tb.Text);
+            settings.setEmailSetting(tb.Tag, tb.Text);         
         }
 
         private void loadGroupSettings(GroupBox group)
@@ -159,6 +160,9 @@ namespace B1SimplificationInterface
                     break;
                 case MainController.Features.VOU_RETURN:
                     controller.runVoucherReturns();
+                    break;
+                case MainController.Features.SFS_VOU_RETURN:
+                    controller.runSFSVoucherReturns();
                     break;
                 case MainController.Features.SEND_EMAIL:
                     controller.runSendDailyEmail();
@@ -354,6 +358,9 @@ namespace B1SimplificationInterface
             controller.settings.setECM((sender as TextBox).Text);
         }
 
-     
+        private void combo_enableSSL_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            controller.settings.setEmailSetting("EMAIL_ENABLE_SSL", combo_enableSSL.Text);
+        }
     }
 }

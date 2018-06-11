@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,7 +40,14 @@ namespace B1SimplificationInterface
             string subsidiaryFilter = settings.getSubsidiaries(feature);
             if (!string.IsNullOrWhiteSpace(subsidiaryFilter))
             {
-                subsidiaryFilter = " and slip.sbs_no in (" + subsidiaryFilter + ") ";
+                if (subsidiaryFilter == "1")
+                {
+                    subsidiaryFilter = " and slip.sbs_no = 1 and slip.in_sbs_no = 1 ";
+                }
+                else
+                {
+                    subsidiaryFilter = " and slip.sbs_no in (" + subsidiaryFilter + ") ";
+                }
             }
             try
             {
@@ -54,13 +60,14 @@ namespace B1SimplificationInterface
                 int zeroCostTotal = zeroCostDocuments.Count;
                 rproDBHandler.insertZeroCostDocuments(zeroCostDocuments, MainController.Features.SLIP);
 
-                string msg = slipCount + " Slips fetched and inserted into B1 with " + error + " error(s). ";
-                msg += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.";
+                string msg = slipCount + " Slips fetched and inserted into B1 with " + error + " error(s). \n ";
+                msg += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.  \n";
 
-                if (error + zeroCostError > 0)
+                if (error + zeroCostTotal > 0)
                 {
-                    string subject = "Errors occured when processing " + feature.ToString();
+                    string subject = "Errors/Zero cost in B1 Interface for  " + feature.ToString();
                     string body = msg;
+                    body += "Please check log for details.";
                     new EmailController(settings).sendEmail(subject, body, rproDBHandler, feature);
                 }
 

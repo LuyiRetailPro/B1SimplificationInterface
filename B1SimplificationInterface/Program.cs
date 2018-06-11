@@ -18,6 +18,9 @@ namespace B1SimplificationInterface
             Application.SetCompatibleTextRenderingDefault(false);
             MainController controller = new MainController();
             string[] args = Environment.GetCommandLineArgs();
+
+           System.Console.WriteLine("system start : " + DateTime.Now);
+
             if (args.Length == 1)
             {
                 Application.Run(new Form1(controller));

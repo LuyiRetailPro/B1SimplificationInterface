@@ -77,6 +77,8 @@ namespace B1SimplificationInterface
                 subsidiaryFilter = " and adj.sbs_no in (" + subsidiaryFilter + ") ";
             }
             Dictionary<string, List<Adj_div>> adjustments = rproDBHandler.getAdjustments(adjSIDs, adj_days, subsidiaryFilter);
+            System.Console.WriteLine("getAdjustments : " + DateTime.Now);
+
             msSqlDBHandler.insertAdjustments(adjustments, rproDBHandler);
             // msSqlDBHandler.updateSlipsToDB(slips, rproDBHandler);
             /*
@@ -107,12 +109,14 @@ namespace B1SimplificationInterface
             msg += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.";
             rproDBHandler.addLog(MainController.LogType.REPORT, "", "", MainController.Features.ADJUSTMENT, msg, null);
 
-          //  if (error > 0)
-          //  {
-                string subject = "Errors in B1 Interface for " + feature.ToString();
-                string body = "There are " + error + " errors when processing " +feature.ToString() + " on " + DateTime.Now.ToString() + ". Please check log for details.";
+            if (error > 0 || zeroCostTotal > 0)
+            {
+                string subject = "Errors/Zero cost in B1 Interface for " + feature.ToString();
+                string body = "There are " + error + " errors when processing " + feature.ToString() + " on " + DateTime.Now.ToString() + ". \n";
+                body += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.\n";
+                body += "Please check log for details.";
                 new EmailController(settings).sendEmail(subject, body, rproDBHandler, feature);
-           // }
+            }            
         }
     }
 

@@ -8,7 +8,6 @@ namespace B1SimplificationInterface
 {
     class VoucherDiscrepancyController
     {
-
         Settings settings;
         RproDBHandler rproDBHandler;
         MsSqlDBHandler msSqlDBHandler;
@@ -55,10 +54,11 @@ namespace B1SimplificationInterface
             string msg = vou_discrepancies.Count + " vouchers with discrepancies fetched and inserted into B1 with " + error + " error(s). ";
             msg += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.";
 
-            if (error + zeroCostError > 0)
+            if (error + zeroCostTotal > 0)
             {
-                string subject = "Exceptions encountered when processing " + feature.ToString();
+                string subject = "Errors/Zero cost in B1 Interface for " + feature.ToString();
                 string body = msg;
+                body += "Please check log for details.";
                 new EmailController(settings).sendEmail(subject, body, rproDBHandler, feature);
             }
 

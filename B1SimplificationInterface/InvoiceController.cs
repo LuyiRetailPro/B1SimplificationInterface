@@ -79,10 +79,13 @@ namespace B1SimplificationInterface
             string msg = invoiceCount + " Invoices fetched and inserted into B1 with " + error + " error(s). ";
             msg += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.";
             rproDBHandler.addLog(MainController.LogType.REPORT, "", "", feature, msg, null);
-            if (error > 0)
+
+            if (error > 0 || zeroCostTotal > 0 )
             {
-                string subject = "Errors in B1 Interface for " + MainController.Features.SALE.ToString();
-                string body = "There are " + error + " errors when processing " + MainController.Features.SALE.ToString() + " on " + DateTime.Now.ToString() + ". Please check log for details.";
+                string subject = "Errors/Zero cost in B1 Interface for " + MainController.Features.SALE.ToString();
+                string body = "There are " + error + " errors when processing " + MainController.Features.SALE.ToString() + " on " + DateTime.Now.ToString() + ". \n";
+                body += zeroCostTotal + " items with zero cost were inserted with " + zeroCostError + " errors.\n";
+                body += "Please check log for details.";
                 new EmailController(settings).sendEmail(subject, body, rproDBHandler, feature);
             }
         }

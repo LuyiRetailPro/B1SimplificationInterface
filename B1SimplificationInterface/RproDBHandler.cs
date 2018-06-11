@@ -233,19 +233,21 @@ namespace B1SimplificationInterface
             left outer join doc_reason_code_v reason on vou.DOC_REASON_ID = reason.doc_reason_id and vou.sbs_no = reason.sbs_no 
             left outer join vou_comment_v comm on comm.vou_sid = vou.vou_sid and comm.COMMENT_NO = 1
             where vou_type = 1 and vou_class = 0 and status2 = 0 and slip_flag = 0 and (reason.doc_reason_code is null or reason.doc_reason_code != 'interface') and vou.created_date >trunc(sysdate)- 10
+            *****and reason.doc_reason_code != 'SFS' and vou.vend_code != 'SFS'
             group by vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD'), to_char(vou.store_no, '000'), vou.sbs_no, reason.doc_reason_code, 
             invn.alu, round(nvl(invn.cost, 0), 2), substr(invn.dcs_code, 0, 3), sto.glob_store_code, comm.comments, invn.vend_code;
             */
             string sql = "select vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD') as vou_date, to_char(vou.store_no, '000') as storeID, vou.sbs_no as subsidiary, reason.doc_reason_code as reason, ";
-            sql += "sum(item.qty) as qty, invn.alu, round(nvl(invn.cost, 0), 2) as cost, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode, comm.COMMENTS as comments, invn.vend_code ";
+            sql += "sum(item.qty) as qty, invn.alu, round(nvl(invn.cost, 0), 2) as cost, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode, comm.COMMENTS as comments, vou.vend_code ";
             sql += "from voucher_v vou inner join vou_item_v item on item.vou_sid = vou.vou_sid ";
             sql += "inner join invn_sbs_v invn on item.item_sid = invn.item_sid and invn.sbs_no = 1 ";
             sql += "inner join store_v sto on vou.store_no = sto.store_no and vou.sbs_no = sto.sbs_no ";
             sql += "left join doc_reason_code_v reason on vou.DOC_REASON_ID = reason.doc_reason_id and vou.sbs_no = reason.sbs_no ";
             sql += "left outer join vou_comment_v comm on comm.vou_sid = vou.vou_sid and comm.COMMENT_NO = 1 ";
             sql += "where vou_type = 1 and vou_class = 0 and status2 = 0 and slip_flag = 0 and (reason.doc_reason_code is null or reason.doc_reason_code != 'interface') and vou.created_date >trunc(sysdate)- " + days_before + subsidiaryFilter + " ";
+            sql += "and reason.doc_reason_code != 'SFS' and vou.vend_code != 'SFS'";
             sql += "group by vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD'), to_char(vou.store_no, '000'), vou.sbs_no, reason.doc_reason_code,  ";
-            sql += "invn.alu, round(nvl(invn.cost, 0), 2), substr(invn.dcs_code, 0, 3), sto.glob_store_code, comm.comments, invn.vend_code ";
+            sql += "invn.alu, round(nvl(invn.cost, 0), 2), substr(invn.dcs_code, 0, 3), sto.glob_store_code, comm.comments, vou.vend_code ";
             Dictionary<String, List<VoucherReturnItem>> vouchers = new Dictionary<String, List<VoucherReturnItem>>();
             using (OracleConnection cn = new OracleConnection(getConnectionString()))
             {
@@ -295,7 +297,93 @@ namespace B1SimplificationInterface
                 catch (Exception e)
                 {
                     VoucherReturnController.error += 1;
-                    addLog(MainController.LogType.EXCEPTION, null, null, MainController.Features.VOU_DISCREPANCY, "An exception occurred when retrieving voucher discrepancies in Retail Pro.", e);
+                    addLog(MainController.LogType.EXCEPTION, null, null, MainController.Features.VOU_RETURN, "An exception occurred when retrieving voucher return in Retail Pro.", e);
+                }
+                finally
+                {
+                    cn.Close();
+                }
+            }
+            return vouchers;
+        }
+
+        public Dictionary<String, List<VoucherReturnItem>> getSFSVoucherReturnItems(HashSet<string> sids, int days_before, string subsidiaryFilter)
+        {
+            /*
+            select vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD') as vou_date, to_char(vou.store_no, '000') as storeID, vou.sbs_no as subsidiary, reason.doc_reason_code as reason,
+            sum(item.qty) as qty, invn.alu, round(nvl(invn.cost, 0), 2) as cost, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode, comm.COMMENTS as comments, vou.vend_code
+            from voucher_v vou inner join vou_item_v item on item.vou_sid = vou.vou_sid
+            inner join invn_sbs_v invn on item.item_sid = invn.item_sid and invn.sbs_no = 1
+            inner join store_v sto on vou.store_no = sto.store_no and vou.sbs_no = sto.sbs_no
+            left outer join doc_reason_code_v reason on vou.DOC_REASON_ID = reason.doc_reason_id and vou.sbs_no = reason.sbs_no 
+            left outer join vou_comment_v comm on comm.vou_sid = vou.vou_sid and comm.COMMENT_NO = 1
+            where vou_type = 1 and vou_class = 0 and status2 = 0 and slip_flag = 0 and (reason.doc_reason_code is null or reason.doc_reason_code != 'interface') and vou.created_date >trunc(sysdate)- 10
+           **** and reason.doc_reason_code = 'SFS' and vou.vend_code = 'SFS'
+            group by vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD'), to_char(vou.store_no, '000'), vou.sbs_no, reason.doc_reason_code, 
+            invn.alu, round(nvl(invn.cost, 0), 2), substr(invn.dcs_code, 0, 3), sto.glob_store_code, comm.comments, invn.vend_code;
+            */
+            string sql = "select vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD') as vou_date, to_char(vou.store_no, '000') as storeID, vou.sbs_no as subsidiary, reason.doc_reason_code as reason, ";
+            sql += "sum(item.qty) as qty, invn.alu, round(nvl(invn.cost, 0), 2) as cost, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode, comm.COMMENTS as comments, vou.vend_code ";
+            sql += "from voucher_v vou inner join vou_item_v item on item.vou_sid = vou.vou_sid ";
+            sql += "inner join invn_sbs_v invn on item.item_sid = invn.item_sid and invn.sbs_no = 1 ";
+            sql += "inner join store_v sto on vou.store_no = sto.store_no and vou.sbs_no = sto.sbs_no ";
+            sql += "left join doc_reason_code_v reason on vou.DOC_REASON_ID = reason.doc_reason_id and vou.sbs_no = reason.sbs_no ";
+            sql += "left outer join vou_comment_v comm on comm.vou_sid = vou.vou_sid and comm.COMMENT_NO = 1 ";
+            sql += "where vou_type = 1 and vou_class = 0 and status2 = 0 and slip_flag = 0 and (reason.doc_reason_code is null or reason.doc_reason_code != 'interface') and vou.created_date >trunc(sysdate)- " + days_before + subsidiaryFilter + " ";
+            sql += "and reason.doc_reason_code = 'SFS' and vou.vend_code = 'SFS'";
+            sql += "group by vou.vou_sid, vou_no, to_char(vou.created_date, 'YYYYMMDD'), to_char(vou.store_no, '000'), vou.sbs_no, reason.doc_reason_code,  ";
+            sql += "invn.alu, round(nvl(invn.cost, 0), 2), substr(invn.dcs_code, 0, 3), sto.glob_store_code, comm.comments, vou.vend_code ";
+
+            Dictionary<String, List<VoucherReturnItem>> vouchers = new Dictionary<String, List<VoucherReturnItem>>();
+            using (OracleConnection cn = new OracleConnection(getConnectionString()))
+            {
+                try
+                {
+                    OracleCommand cmd = new OracleCommand(sql, cn);
+                    cn.Open();
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        string sid = reader["vou_sid"].ToString();
+                        if (sids.Contains(sid))
+                        {
+                            continue;
+                        }
+                        VoucherReturnItem vou_item = new VoucherReturnItem();
+                        vou_item.vou_sid = sid;
+                        vou_item.vou_date = reader["vou_date"].ToString().Trim();
+                        vou_item.vou_no = reader["vou_no"].ToString().Trim();
+                        vou_item.storeid = reader["storeID"].ToString().Trim();
+                        vou_item.subsidiary = reader["subsidiary"].ToString().Trim();
+                        vou_item.qty = reader["qty"].ToString().Trim();
+                        vou_item.alu = reader["alu"].ToString().Trim();
+                        vou_item.value = reader["cost"].ToString().Trim();
+                        vou_item.division = reader["division"].ToString().Trim();
+                        vou_item.cardcode = reader["cardcode"].ToString().Trim();
+                        vou_item.vend_code = reader["vend_code"].ToString().Trim();
+                        vou_item.reason = reader["reason"].ToString().Trim();
+                        vou_item.comments = getStringVal(reader, "comments");
+                        if (string.IsNullOrWhiteSpace(vou_item.comments))
+                        {
+                            vou_item.comments = "";
+                        }
+                        if (vouchers.ContainsKey(sid))
+                        {
+                            List<VoucherReturnItem> vou_items = vouchers[sid];
+                            vou_items.Add(vou_item);
+                        }
+                        else
+                        {
+                            List<VoucherReturnItem> vou_items = new List<VoucherReturnItem>();
+                            vou_items.Add(vou_item);
+                            vouchers[sid] = vou_items;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    VoucherReturnController.error += 1;
+                    addLog(MainController.LogType.EXCEPTION, null, null, MainController.Features.SFS_VOU_RETURN, "An exception occurred when retrieving SFS voucher return in Retail Pro.", e);
                 }
                 finally
                 {
@@ -353,6 +441,7 @@ namespace B1SimplificationInterface
             }
             return storecosts;
         }
+
         public Dictionary<string, List<Adj_div>> getAdjustments(HashSet<string> adjSIDs, int days_before, string subsidiaryFilter)
         {
             /*
@@ -536,6 +625,7 @@ namespace B1SimplificationInterface
                 }
             }
         }
+
         public string getServerDate(RproDBHandler rproDBHandler)
         {
             using (OracleConnection cn = new OracleConnection(getConnectionString()))
@@ -569,6 +659,7 @@ namespace B1SimplificationInterface
                 return null;
             }
         }
+
         private void addZeroCostErrorCount(MainController.Features feature)
         {
             switch (feature)

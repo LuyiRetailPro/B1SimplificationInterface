@@ -52,9 +52,10 @@ namespace B1SimplificationInterface
                 mail.Subject = subject;
                 mail.Body = body;
 
-                //SmtpServer.Port = smtp_port;
+                // SmtpServer.Port = smtp_port;
+                SmtpServer.UseDefaultCredentials = false;
                 SmtpServer.Credentials = new System.Net.NetworkCredential(email_sender_address, email_password);
-                SmtpServer.EnableSsl = true;
+                SmtpServer.EnableSsl = email_enable_SSL;
                 SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
                 SmtpServer.Send(mail);
 
@@ -79,6 +80,7 @@ namespace B1SimplificationInterface
                 List<string[]> zeroCostLogs = rproDBHandler.getZeroCost("where date1 > trunc(sysdate)");
 
                 String body = "<table width='100%' cellspacing='0' border='1' style='border - collapse:collapse;' >";
+                body += "<caption>Error Logs</caption>";
                 foreach (var item in errorLogs)
                 {
                     body += "<tr>";
@@ -92,6 +94,7 @@ namespace B1SimplificationInterface
                 body += "<br> <br/>";
 
                 body += "<table width='100%' cellspacing='0' border='1' style='border - collapse:collapse;' >";
+                body += "<caption>Zero Cost Logs</caption>";
                 foreach (var item in zeroCostLogs)
                 {
                     body += "<tr>";
@@ -110,15 +113,14 @@ namespace B1SimplificationInterface
                 mail.Subject = "B1 Daily Email " + System.DateTime.Today.ToShortDateString().ToString();
                 mail.IsBodyHtml = true;
                 mail.Body = body;
-               
 
                 //SmtpServer.Port = smtp_port;
                 SmtpServer.Credentials = new System.Net.NetworkCredential(email_sender_address, email_password);
-                SmtpServer.EnableSsl = true;
+                SmtpServer.EnableSsl = email_enable_SSL;
                 SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
                 SmtpServer.Send(mail);
 
-                rproDBHandler.addLog(MainController.LogType.REPORT, "", "", MainController.Features.SEND_EMAIL, "Email Sent", null);
+                rproDBHandler.addLog(MainController.LogType.REPORT, "", "", MainController.Features.SEND_EMAIL, "Email Sent (Today's Log)", null);
             }
             catch (Exception e)
             {

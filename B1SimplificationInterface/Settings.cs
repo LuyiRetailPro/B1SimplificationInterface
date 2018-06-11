@@ -117,13 +117,13 @@ namespace B1SimplificationInterface
 
         public string getSubsidiaries(MainController.Features feature)
         {
-            string days = Read(feature.ToString() + " SUBSIDIARIES", feature.ToString());
-            if (string.IsNullOrWhiteSpace(days))
+            string subs = Read(feature.ToString() + " SUBSIDIARIES", feature.ToString());
+            if (string.IsNullOrWhiteSpace(subs))
             {
-                days = "";
-                setDays(feature, days);
+                subs = "";
+                setSubsidiaries(feature, subs);
             }
-            return days;
+            return subs;
         }
 
         public void setSubsidiaries(MainController.Features feature, string subsidiaries)
@@ -162,8 +162,6 @@ namespace B1SimplificationInterface
         {
             return Read(Key, Section).Length > 0;
         }
-
-
 
         public string getEmailSetting(object section)
         {

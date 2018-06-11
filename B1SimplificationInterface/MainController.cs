@@ -69,6 +69,9 @@ namespace B1SimplificationInterface
                             case Features.VOU_RETURN:
                                 runVoucherReturns();
                                 break;
+                            case Features.SFS_VOU_RETURN:
+                                runSFSVoucherReturns();
+                                break;
                             case Features.SEND_EMAIL:
                                 runSendDailyEmail();
                                 break;
@@ -126,6 +129,13 @@ namespace B1SimplificationInterface
 
         }
 
+        public void runSFSVoucherReturns()
+        {
+            SFSVoucherReturnController controller = new SFSVoucherReturnController(settings, rproDBHandler, msSqlDBHandler);
+            controller.runUpdateSFSVoucherReturns();
+
+        }
+
         public void runSendDailyEmail()
         {
             EmailController controller = new EmailController(settings);
@@ -143,6 +153,7 @@ namespace B1SimplificationInterface
             ItemCostController controller = new ItemCostController(settings, rproDBHandler, msSqlDBHandler);
             return controller.getCostDifferences();
         }
+
         public void runStoreFullSync()
         {
             storeSyncError = 0;
@@ -183,6 +194,7 @@ namespace B1SimplificationInterface
             SLIP,
             VOU_DISCREPANCY,
             VOU_RETURN,
+            SFS_VOU_RETURN,
             ITEM_COST,
             STORE_SYNC,
             SEND_EMAIL,
@@ -201,7 +213,6 @@ namespace B1SimplificationInterface
         {
             return (Features)System.Enum.Parse(typeof(Features), featurename);
         }
-
     }
 
     public class ZeroCostDocument

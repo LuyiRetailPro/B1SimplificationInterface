@@ -63,6 +63,11 @@
             this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tab_settings = new System.Windows.Forms.TabPage();
+            this.group_SFS_VOU_RETURN = new System.Windows.Forms.GroupBox();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBox13 = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.group_STORE_SYNC = new System.Windows.Forms.GroupBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.label26 = new System.Windows.Forms.Label();
@@ -128,6 +133,7 @@
             this.tab_error_log.SuspendLayout();
             this.tab_zero_cost_log.SuspendLayout();
             this.tab_settings.SuspendLayout();
+            this.group_SFS_VOU_RETURN.SuspendLayout();
             this.group_STORE_SYNC.SuspendLayout();
             this.group_email_settings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -148,7 +154,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1265, 557);
+            this.tabControl1.Size = new System.Drawing.Size(1265, 620);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.changetab);
             // 
@@ -161,7 +167,7 @@
             this.tab_main.Location = new System.Drawing.Point(4, 25);
             this.tab_main.Name = "tab_main";
             this.tab_main.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_main.Size = new System.Drawing.Size(1257, 528);
+            this.tab_main.Size = new System.Drawing.Size(1257, 591);
             this.tab_main.TabIndex = 0;
             this.tab_main.Text = "Main";
             this.tab_main.UseVisualStyleBackColor = true;
@@ -169,7 +175,7 @@
             // bn_check_item_cost
             // 
             this.bn_check_item_cost.BackColor = System.Drawing.Color.LawnGreen;
-            this.bn_check_item_cost.Location = new System.Drawing.Point(6, 490);
+            this.bn_check_item_cost.Location = new System.Drawing.Point(6, 541);
             this.bn_check_item_cost.Name = "bn_check_item_cost";
             this.bn_check_item_cost.Size = new System.Drawing.Size(130, 32);
             this.bn_check_item_cost.TabIndex = 8;
@@ -179,7 +185,7 @@
             // 
             // bn_run
             // 
-            this.bn_run.Location = new System.Drawing.Point(1150, 490);
+            this.bn_run.Location = new System.Drawing.Point(1150, 541);
             this.bn_run.Name = "bn_run";
             this.bn_run.Size = new System.Drawing.Size(101, 32);
             this.bn_run.TabIndex = 2;
@@ -190,7 +196,7 @@
             // combo_features
             // 
             this.combo_features.FormattingEnabled = true;
-            this.combo_features.Location = new System.Drawing.Point(936, 495);
+            this.combo_features.Location = new System.Drawing.Point(936, 546);
             this.combo_features.Name = "combo_features";
             this.combo_features.Size = new System.Drawing.Size(208, 24);
             this.combo_features.TabIndex = 1;
@@ -208,7 +214,7 @@
             this.col_stacktrace});
             this.listview_main.Location = new System.Drawing.Point(0, 0);
             this.listview_main.Name = "listview_main";
-            this.listview_main.Size = new System.Drawing.Size(1257, 484);
+            this.listview_main.Size = new System.Drawing.Size(1257, 535);
             this.listview_main.TabIndex = 0;
             this.listview_main.UseCompatibleStateImageBehavior = false;
             this.listview_main.View = System.Windows.Forms.View.Details;
@@ -257,7 +263,7 @@
             this.tab_error_log.Location = new System.Drawing.Point(4, 25);
             this.tab_error_log.Name = "tab_error_log";
             this.tab_error_log.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_error_log.Size = new System.Drawing.Size(1257, 528);
+            this.tab_error_log.Size = new System.Drawing.Size(1257, 591);
             this.tab_error_log.TabIndex = 3;
             this.tab_error_log.Text = "Error Log";
             this.tab_error_log.UseVisualStyleBackColor = true;
@@ -275,7 +281,7 @@
             this.columnHeader8});
             this.listview_error.Location = new System.Drawing.Point(0, 0);
             this.listview_error.Name = "listview_error";
-            this.listview_error.Size = new System.Drawing.Size(1257, 528);
+            this.listview_error.Size = new System.Drawing.Size(1257, 585);
             this.listview_error.TabIndex = 1;
             this.listview_error.UseCompatibleStateImageBehavior = false;
             this.listview_error.View = System.Windows.Forms.View.Details;
@@ -327,14 +333,14 @@
             this.tab_zero_cost_log.Controls.Add(this.listview_zerocost);
             this.tab_zero_cost_log.Location = new System.Drawing.Point(4, 25);
             this.tab_zero_cost_log.Name = "tab_zero_cost_log";
-            this.tab_zero_cost_log.Size = new System.Drawing.Size(1257, 528);
+            this.tab_zero_cost_log.Size = new System.Drawing.Size(1257, 591);
             this.tab_zero_cost_log.TabIndex = 2;
             this.tab_zero_cost_log.Text = "Zero Cost Log";
             this.tab_zero_cost_log.UseVisualStyleBackColor = true;
             // 
             // tb_zero_cost
             // 
-            this.tb_zero_cost.Location = new System.Drawing.Point(920, 495);
+            this.tb_zero_cost.Location = new System.Drawing.Point(927, 540);
             this.tb_zero_cost.Name = "tb_zero_cost";
             this.tb_zero_cost.Size = new System.Drawing.Size(112, 22);
             this.tb_zero_cost.TabIndex = 6;
@@ -344,7 +350,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(1038, 498);
+            this.label17.Location = new System.Drawing.Point(1045, 543);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(70, 17);
             this.label17.TabIndex = 5;
@@ -353,7 +359,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(813, 498);
+            this.label15.Location = new System.Drawing.Point(820, 543);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(101, 17);
             this.label15.TabIndex = 4;
@@ -361,7 +367,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1145, 490);
+            this.button2.Location = new System.Drawing.Point(1152, 535);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(101, 32);
             this.button2.TabIndex = 3;
@@ -378,7 +384,7 @@
             this.columnHeader13});
             this.listview_zerocost.Location = new System.Drawing.Point(0, 0);
             this.listview_zerocost.Name = "listview_zerocost";
-            this.listview_zerocost.Size = new System.Drawing.Size(1257, 484);
+            this.listview_zerocost.Size = new System.Drawing.Size(1257, 529);
             this.listview_zerocost.TabIndex = 2;
             this.listview_zerocost.UseCompatibleStateImageBehavior = false;
             this.listview_zerocost.View = System.Windows.Forms.View.Details;
@@ -405,6 +411,7 @@
             // 
             // tab_settings
             // 
+            this.tab_settings.Controls.Add(this.group_SFS_VOU_RETURN);
             this.tab_settings.Controls.Add(this.group_STORE_SYNC);
             this.tab_settings.Controls.Add(this.group_email_settings);
             this.tab_settings.Controls.Add(this.groupBox1);
@@ -417,17 +424,65 @@
             this.tab_settings.Location = new System.Drawing.Point(4, 25);
             this.tab_settings.Name = "tab_settings";
             this.tab_settings.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_settings.Size = new System.Drawing.Size(1257, 528);
+            this.tab_settings.Size = new System.Drawing.Size(1257, 591);
             this.tab_settings.TabIndex = 1;
             this.tab_settings.Text = "Settings";
             this.tab_settings.UseVisualStyleBackColor = true;
+            // 
+            // group_SFS_VOU_RETURN
+            // 
+            this.group_SFS_VOU_RETURN.Controls.Add(this.textBox12);
+            this.group_SFS_VOU_RETURN.Controls.Add(this.label28);
+            this.group_SFS_VOU_RETURN.Controls.Add(this.textBox13);
+            this.group_SFS_VOU_RETURN.Controls.Add(this.label29);
+            this.group_SFS_VOU_RETURN.Location = new System.Drawing.Point(6, 341);
+            this.group_SFS_VOU_RETURN.Name = "group_SFS_VOU_RETURN";
+            this.group_SFS_VOU_RETURN.Size = new System.Drawing.Size(768, 61);
+            this.group_SFS_VOU_RETURN.TabIndex = 13;
+            this.group_SFS_VOU_RETURN.TabStop = false;
+            this.group_SFS_VOU_RETURN.Tag = "SFS_VOU_RETURN";
+            this.group_SFS_VOU_RETURN.Text = "SFS_VOU_RETURN";
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(387, 29);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(371, 22);
+            this.textBox12.TabIndex = 10;
+            this.textBox12.Tag = "";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(206, 32);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(175, 17);
+            this.label28.TabIndex = 2;
+            this.label28.Text = "Subsidiaries (e.g. 1,2,3,4):";
+            // 
+            // textBox13
+            // 
+            this.textBox13.Location = new System.Drawing.Point(123, 29);
+            this.textBox13.Name = "textBox13";
+            this.textBox13.Size = new System.Drawing.Size(68, 22);
+            this.textBox13.TabIndex = 9;
+            this.textBox13.Tag = "";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(15, 32);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(102, 17);
+            this.label29.TabIndex = 0;
+            this.label29.Text = "Days (e.g. 10):";
             // 
             // group_STORE_SYNC
             // 
             this.group_STORE_SYNC.Controls.Add(this.textBox11);
             this.group_STORE_SYNC.Controls.Add(this.label26);
             this.group_STORE_SYNC.Controls.Add(this.label27);
-            this.group_STORE_SYNC.Location = new System.Drawing.Point(6, 341);
+            this.group_STORE_SYNC.Location = new System.Drawing.Point(6, 408);
             this.group_STORE_SYNC.Name = "group_STORE_SYNC";
             this.group_STORE_SYNC.Size = new System.Drawing.Size(768, 61);
             this.group_STORE_SYNC.TabIndex = 11;
@@ -527,7 +582,7 @@
             this.combo_enableSSL.Size = new System.Drawing.Size(305, 24);
             this.combo_enableSSL.TabIndex = 11;
             this.combo_enableSSL.Tag = "EMAIL_ENABLE_SSL";
-        //    this.combo_enableSSL.SelectedIndexChanged += new System.EventHandler(this.combo_enableSSL_SelectedIndexChanged);
+            this.combo_enableSSL.SelectedIndexChanged += new System.EventHandler(this.combo_enableSSL_SelectedIndexChanged);
             // 
             // label21
             // 
@@ -601,7 +656,7 @@
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.tb_filepath);
             this.groupBox1.Controls.Add(this.label16);
-            this.groupBox1.Location = new System.Drawing.Point(6, 408);
+            this.groupBox1.Location = new System.Drawing.Point(6, 475);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(768, 114);
             this.groupBox1.TabIndex = 11;
@@ -1017,17 +1072,19 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1282, 573);
+            this.ClientSize = new System.Drawing.Size(1282, 657);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "B1 Simplification Interface V1.0.0.2";
+            this.Text = "B1 Simplification Interface V1.0.0.3";
             this.tabControl1.ResumeLayout(false);
             this.tab_main.ResumeLayout(false);
             this.tab_error_log.ResumeLayout(false);
             this.tab_zero_cost_log.ResumeLayout(false);
             this.tab_zero_cost_log.PerformLayout();
             this.tab_settings.ResumeLayout(false);
+            this.group_SFS_VOU_RETURN.ResumeLayout(false);
+            this.group_SFS_VOU_RETURN.PerformLayout();
             this.group_STORE_SYNC.ResumeLayout(false);
             this.group_STORE_SYNC.PerformLayout();
             this.group_email_settings.ResumeLayout(false);
@@ -1147,6 +1204,11 @@
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.GroupBox group_SFS_VOU_RETURN;
+        private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textBox13;
+        private System.Windows.Forms.Label label29;
     }
 }
 
