@@ -31,11 +31,45 @@ namespace B1SimplificationInterface
             {
                 subsidiaryFIlter = " and inv.sbs_no in (" + subsidiaryFIlter + ") ";
             }
+
+            /* --- With TAX after discount
+             * 
+             * select inv.invc_sid, invn.alu, to_char(inv.created_date, 'yyyyMMdd') as inv_date, to_char(inv.store_no, '000') as store_code, inv.sbs_no,
+            inv.invc_no, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode,
+            round(nvl(case when inv.invc_type = 2 then item.qty * invn.cost * -1 else item.qty * invn.cost end, 0), 2) as cost, nvl(invn.cost, 0) as unit_cost,
+            round(case when inv.invc_type = 2 then(item.qty * (item.price - item.tax_amt)) * (100 - nvl(inv.disc_perc, 0)) / 100 * -1
+            else (item.qty * (item.price - tax_amt)) * (100 - nvl(inv.disc_perc, 0)) / 100 end, 2) as nett_sales
+            from invoice_v inv
+            inner join invc_item_v item on inv.invc_sid = item.invc_sid
+            inner join store_v sto on inv.store_no = sto.store_no and inv.sbs_no = sto.sbs_no
+            inner join invn_sbs_v invn on item.item_sid = invn.item_sid and invn.sbs_no = 1
+            where inv.hisec_type is null and inv.status2 = 0 and sto.glob_store_code is not null
+            and inv.created_date > trunc(sysdate) - 10
+            order by invc_sid;
+            */
+
+            /* ---NetSales Without TAX after discount && Cost with TAX(1.16)
+             * 
+             * select inv.invc_sid, invn.alu, to_char(inv.created_date, 'yyyyMMdd') as inv_date, to_char(inv.store_no, '000') as store_code, inv.sbs_no,
+            inv.invc_no, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode,
+            round(nvl(case when inv.invc_type = 2 then item.qty * invn.cost*1.16 * -1 else item.qty * invn.cost*1.16 end, 0), 2) as cost,
+            nvl(invn.cost*1.16, 0) as unit_cost,
+            round(case when inv.invc_type = 2 then item.qty * item.price * (100 - nvl(inv.disc_perc, 0)) / 100 * -1
+            else item.qty * item.price * (100 - nvl(inv.disc_perc, 0)) / 100 end, 2) as nett_sales
+            from invoice_v inv
+            inner join invc_item_v item on inv.invc_sid = item.invc_sid
+            inner join store_v sto on inv.store_no = sto.store_no and inv.sbs_no = sto.sbs_no
+            inner join invn_sbs_v invn on item.item_sid = invn.item_sid and invn.sbs_no = 1
+            where inv.hisec_type is null and inv.status2 = 0 and sto.glob_store_code is not null
+            and inv.created_date > trunc(sysdate) - 10
+            order by invc_sid;
+            */
+
             string sql = "select inv.invc_sid, invn.alu, to_char(inv.created_date, 'yyyyMMdd') as inv_date, to_char(inv.store_no, '000') as store_code, inv.sbs_no, ";
             sql += "inv.invc_no, substr(invn.dcs_code, 0, 3) as division, sto.glob_store_code as cardcode, ";
-            sql += "round(nvl(case when inv.invc_type = 2 then item.qty * invn.cost * -1 else item.qty * invn.cost end, 0), 2) as cost, nvl(invn.cost, 0) as unit_cost, ";
-            sql += "round(case when inv.invc_type = 2 then(item.qty * (item.price - item.tax_amt)) * (100 - nvl(inv.disc_perc, 0)) / 100 * -1 ";
-            sql += "else (item.qty * (item.price - tax_amt)) * (100 - nvl(inv.disc_perc, 0)) / 100 end, 2) as nett_sales ";
+            sql += "round(nvl(case when inv.invc_type = 2 then item.qty * invn.cost*1.16 * -1 else item.qty * invn.cost*1.16 end, 0), 2) as cost, nvl(invn.cost*1.16, 0) as unit_cost, ";
+            sql += "round(case when inv.invc_type = 2 then item.qty * item.price * (100 - nvl(inv.disc_perc, 0)) / 100 * -1 ";
+            sql += "else item.qty * item.price * (100 - nvl(inv.disc_perc, 0)) / 100 end, 2) as nett_sales ";
             sql += "from invoice_v inv inner join invc_item_v item on inv.invc_sid = item.invc_sid  ";
             sql += "inner join store_v sto on inv.store_no = sto.store_no and inv.sbs_no = sto.sbs_no ";
             sql += "inner join invn_sbs_v invn on item.item_sid = invn.item_sid and invn.sbs_no = 1 where inv.hisec_type is null and inv.status2 = 0 and sto.glob_store_code is not null ";
